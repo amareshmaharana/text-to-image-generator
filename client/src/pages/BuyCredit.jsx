@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { motion } from "motion/react";
 
 import { assets, plans } from "../assets/assets";
 import { AppContext } from "../context/AppContext";
@@ -16,7 +17,13 @@ const BuyCredit = () => {
           Choose a plan
         </h1>
 
-        <div className="flex flex-wrap justify-center gap-6 text-left">
+        <motion.div
+          initial={{ opacity: 0.2, y: 100 }}
+          transition={{ duration: 1 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="flex flex-wrap justify-center gap-6 text-left"
+        >
           {plans.map((item, index) => (
             <div
               key={index}
@@ -30,11 +37,11 @@ const BuyCredit = () => {
                 {item.credits} credits
               </p>
               <button className="w-full bg-gray-800 text-white mt-8 text-sm rounded-md py-2.5 min-w-52">
-                {user ? 'Purchase' : 'Get Started'}
+                {user ? "Purchase" : "Get Started"}
               </button>
             </div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </>
   );

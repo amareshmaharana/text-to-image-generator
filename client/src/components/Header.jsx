@@ -1,9 +1,23 @@
-import React from "react";
-import { motion } from "framer-motion";
+import { useContext } from "react";
+import { motion } from "motion/react";
+import {useNavigate} from "react-router-dom"
 
 import { assets } from "../assets/assets";
+import {AppContext} from "../context/AppContext"
+
 
 const Header = () => {
+  const { user, setShowLogin } = useContext(AppContext)
+  const navigate = useNavigate()
+
+  const onClickHandler = () => {
+    if (user) {
+      navigate("/result");
+    } else {
+      setShowLogin(true);
+    }
+  };
+
   return (
     <>
       <motion.div
@@ -48,6 +62,7 @@ const Header = () => {
         </motion.p>
 
         <motion.button
+          onClick={onClickHandler}
           className="inline-flex items-center gap-2 px-9 py-3 rounded-full bg-black text-white m-auto hover:scale-105 transition-all duration-500 mt-8"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
@@ -61,11 +76,17 @@ const Header = () => {
           Generate <img className="h-6" src={assets.star_group} />
         </motion.button>
 
-        <div className="flex flex-wrap justify-center gap-2 mt-16">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+          className="flex flex-wrap justify-center gap-2 mt-16"
+        >
           {Array(6)
             .fill("")
             .map((item, index) => (
-              <img
+              <motion.img
+                whileHover={{ scale: 1.05, duration: 0.1 }}
                 className="rounded hover:scale-105 translate-all duration-300 cursor-pointer max-sm:w-10"
                 src={
                   index % 2 === 0 ? assets.sample_img_2 : assets.sample_img_1
@@ -75,10 +96,15 @@ const Header = () => {
                 width={70}
               />
             ))}
-        </div>
-        <p className="mt-2 text-neutral-600">
+        </motion.div>
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.8 }}
+          className="mt-2 text-neutral-600"
+        >
           Generated images from DoodleForge
-        </p>
+        </motion.p>
       </motion.div>
     </>
   );
