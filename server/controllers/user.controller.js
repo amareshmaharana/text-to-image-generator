@@ -29,7 +29,7 @@ export const registerUser = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
 
-    res.status(201).json({ token, user: { name: user.name } });
+    res.json({success: true, token, user: { name: user.name } });
   } catch (error) {
     console.error("ERROR :: ", error);
     res.status(500).json({ message: "Something went wrong!!!" });
@@ -43,14 +43,14 @@ export const loginUser = async (req, res) => {
     const user = await User.findOne({ email: email });
 
     if (!user) {
-      return res.status(404).json({ message: "User does not exist!!" });
+      return res.json({success: false, message: "User does not exist!!" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (isMatch) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY);
-      res.status(201).json({ token, user: { name: user.name } });
+      res.json({success: true, token, user: { name: user.name } });
     } else {
         return res.status(400).json({message: "Invalid credentials!!"})
     }
@@ -66,7 +66,7 @@ export const userCredits = async (req, res) => {
     const {userId} = req.body
 
     const user = await User.findById(userId)
-    res.status(200).json({credits: user.creditBalance, user: {name: user.name}})
+    res.json({success: true, credits: user.creditBalance, user: {name: user.name}})
 
   } catch (error) {
     console.log("ERRROR :: ", error)
