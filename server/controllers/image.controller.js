@@ -10,11 +10,12 @@ export const generateImage = async (req, res) => {
     const user = await User.findById(userId);
 
     if (!user || !prompt) {
-      return res.status(400).json({ message: "Invalid input" });
+      return res.json({ success: false, message: "Invalid input" });
     }
 
     if (user.creditBalance === 0 || User.creditBalance < 0) {
-      return res.status(400).json({
+      return res.json({
+        success: false,
         message: "Insufficient credit",
         creditBalance: user.creditBalance,
       });
@@ -41,13 +42,14 @@ export const generateImage = async (req, res) => {
     await User.findByIdAndUpdate(user._id, {
       creditBalance: user.creditBalance - 1,
     });
-    res.status(200).json({
+    res.json({
+      success: true,
       creditBalance: user.creditBalance - 1,
       message: "Image created successfully",
       image: resultImage,
     });
   } catch (error) {
-    console.error(error);
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 };
