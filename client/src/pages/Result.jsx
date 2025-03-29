@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { motion } from "motion/react";
 
 import { assets } from "../assets/assets";
+import { AppContext } from "../context/AppContext";
 
 const Result = () => {
   const [image, setImage] = useState(assets.sample_img_1);
@@ -9,7 +10,21 @@ const Result = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [input, setInput] = useState("");
 
-  const onSubmitHandler = async (e) => {};
+  const { generateImage } = useContext(AppContext);
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    if (input) {
+      const image = await generateImage(input);
+      if (image) {
+        setIsImageLoaded(true);
+        setImage(image);
+      }
+    }
+    setIsLoading(false);
+  };
 
   return (
     <>
@@ -30,7 +45,7 @@ const Result = () => {
               }`}
             />
           </div>
-          <p className={!isLoading ? "hidden" : ""}>Loading...........</p>
+          <p className={!isLoading ? "hidden" : ""}>Loading........</p>
         </div>
 
         {!isImageLoaded && (
@@ -43,6 +58,7 @@ const Result = () => {
               className="flex-1 bg-transparent outline-none ml-8 max-sm:w-20 text-black"
             />
             <button
+              onSubmit={onSubmitHandler}
               type="submit"
               className="bg-zinc-900 px-10 sm:px-16 py-3 rounded-full"
             >

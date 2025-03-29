@@ -13,7 +13,7 @@ export const generateImage = async (req, res) => {
       return res.json({ success: false, message: "Invalid input" });
     }
 
-    if (user.creditBalance === 0 || User.creditBalance < 0) {
+    if (user.creditBalance === 0 || user.creditBalance < 0) {
       return res.json({
         success: false,
         message: "Insufficient credit",
@@ -31,8 +31,9 @@ export const generateImage = async (req, res) => {
       {
         headers: {
           "x-api-key": process.env.CLIPDROP_API_KEY,
+          ...formData.getHeaders(),
         },
-        responseType: "arraybuffer",
+        responseType: "arraybuffer"
       }
     );
 
@@ -50,6 +51,6 @@ export const generateImage = async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: error.message });
+    res.json({success: false, message: error.message });
   }
 };
